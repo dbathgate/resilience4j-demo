@@ -1,0 +1,36 @@
+
+
+management.endpoints.web.exposure.include: '*'
+management.endpoint.health.show-details: always
+
+management.health.diskspace.enabled: false
+management.health.circuitbreakers.enabled: true
+management.health.ratelimiters.enabled: true
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      helloCircuitBreaker:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        waitDurationInOpenState: 10s
+        slowCallDurationThreshold: 5s
+
+  ratelimiter:
+    instances:
+      helloRateLimiter:
+        registerHealthIndicator: true
+        timeoutDuration: 3s
+
+  thread-pool-bulkhead:
+    instances:
+      helloThreadBulkhead:
+        maxThreadPoolSize: 1
+        coreThreadPoolSize: 1
+        queueCapacity: 1
+
+  bulkhead:
+    instances:
+      helloBulkhead:
+        maxConcurrentCalls: 2
